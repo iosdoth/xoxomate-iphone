@@ -49,6 +49,7 @@
 #pragma mark - Button Click Event
 
 - (IBAction)btnBackTapped:(id)sender{
+    
     [self removeFromParentViewController];
     [self.view removeFromSuperview];
     [self willMoveToParentViewController:nil];

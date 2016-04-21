@@ -17,6 +17,8 @@
 @property (strong, nonatomic) IBOutlet UIWebView *webView;
 @property (strong, nonatomic) OnlineUserList *onlineUserList;
 @property (strong, nonatomic) DialogsViewController *activeUserList;
+@property (strong, nonatomic) ChatViewController *chatVC;
+
 @property (strong, nonatomic) IBOutlet UIButton *btnBack;
 
 @end
@@ -69,6 +71,18 @@
 
 - (IBAction)btnOnlineUserTapped:(id)sender{
     
+    for (UIViewController *aVC in _activeUserList.navigationController.viewControllers)
+    {
+        if ([aVC isKindOfClass:[ChatViewController class]])
+        {
+            [_activeUserList.navigationController popToViewController:self.activeUserList animated:NO];
+        }
+    }
+    
+    [_activeUserList removeFromParentViewController];
+    [_activeUserList.view removeFromSuperview];
+    [_activeUserList willMoveToParentViewController:nil];
+    
     if (app.isLogin) {
         [[self view] endEditing:TRUE];
         
@@ -76,11 +90,9 @@
         UINavigationController *navController=[[UINavigationController alloc]initWithRootViewController:self.onlineUserList];
         navController.navigationBar.hidden = YES;
         
-        //    self.onlineUserList.delegate = self;
-        
         CGRect aRect = [[UIScreen mainScreen] bounds];
         
-        [navController.view setFrame:(CGRect){0, 0, aRect.size.width, aRect.size.height-60}];
+        [navController.view setFrame:(CGRect){0, 0, aRect.size.width, aRect.size.height-48}];
         
         [self addChildViewController:navController];
         [self.view addSubview:navController.view];
@@ -93,6 +105,18 @@
 
 - (IBAction)btnActiveUserTapped:(id)sender{
     
+    for (UIViewController *aVC in _onlineUserList.navigationController.viewControllers)
+    {
+        if ([aVC isKindOfClass:[ChatViewController class]])
+        {
+            [_onlineUserList.navigationController popToViewController:self.onlineUserList animated:NO];
+        }
+    }
+    
+    [_onlineUserList removeFromParentViewController];
+    [_onlineUserList.view removeFromSuperview];
+    [_onlineUserList willMoveToParentViewController:nil];
+    
     if (app.isLogin) {
         [[self view] endEditing:TRUE];
         
@@ -104,7 +128,7 @@
         
         CGRect aRect = [[UIScreen mainScreen] bounds];
         
-        [navController.view setFrame:(CGRect){0, 0, aRect.size.width, aRect.size.height-60}];
+        [navController.view setFrame:(CGRect){0, 0, aRect.size.width, aRect.size.height-48}];
         [self addChildViewController:navController];
         [self.view addSubview:navController.view];
         [self didMoveToParentViewController:navController];
