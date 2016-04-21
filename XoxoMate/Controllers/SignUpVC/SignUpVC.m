@@ -68,6 +68,7 @@
 }
 
 - (IBAction)btnOnlineUserTapped:(id)sender{
+    
     if (app.isLogin) {
         [[self view] endEditing:TRUE];
         
@@ -84,15 +85,13 @@
         [self addChildViewController:navController];
         [self.view addSubview:navController.view];
         [self didMoveToParentViewController:navController];
+
     }else{
         [[TKAlertCenter defaultCenter] postAlertWithMessage:@"Please login first!!!" image:kErrorImage];
     }
 }
 
 - (IBAction)btnActiveUserTapped:(id)sender{
-    //    __weak __typeof(self)weakSelf = self;
-    //    __typeof(self) strongSelf = weakSelf;
-    //    [strongSelf performSegueWithIdentifier:kGoToDialogsSegueIdentifier sender:nil];
     
     if (app.isLogin) {
         [[self view] endEditing:TRUE];

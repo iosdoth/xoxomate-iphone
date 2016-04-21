@@ -64,6 +64,8 @@ const NSTimeInterval kQBDialingTimeInterval = 5.f;
     [QBRTCConfig setDialingTimeInterval:kQBDialingTimeInterval];
     [QBRTCClient initializeRTC];
 
+    [self registerForRemoteNotifications];
+    
     return YES;
 }
 
@@ -131,6 +133,23 @@ const NSTimeInterval kQBDialingTimeInterval = 5.f;
             });
         }
     }
+}
+
+- (void)registerForRemoteNotifications
+{
+    
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+    else{
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+    }
+#else
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+#endif
 }
 
 @end
