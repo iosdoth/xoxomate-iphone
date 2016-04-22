@@ -11,6 +11,7 @@
 #pragma mark - Import Files
 
 #import "AppDelegate.h"
+#import "RegisterVC.h"
 #import "SignUpVC.h"
 #import "LoginVC.h"
 #import "DialogsViewController.h"
@@ -34,6 +35,7 @@
 #import "MBProgressHUD.h"
 #import "TKAlertCenter.h"
 #import <SVProgressHUD.h>
+#import "IQKeyboardManager.h"
 
 #pragma mark - WebServices
 
@@ -53,13 +55,6 @@ static NSString *const kUserTableViewCellIdentifier = @"UserTableViewCellIdentif
 static NSString *const kPushNotificationDialogIdentifierKey = @"dialog_id";
 static NSString *const kPushNotificationDialogMessageKey = @"message";
 
-//Live URL
-
-#define BASE_URL                                @"https://xoxomate.com/api/Apis/"
-
-
-#define kLogin                                  BASE_URL@"login.json"
-
 #define kAppDelegate                            ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 #define kStoryboard                             [UIStoryboard storyboardWithName:@"Main" bundle:nil]
 
@@ -71,6 +66,7 @@ static NSString *const kPushNotificationDialogMessageKey = @"message";
 #define kUserInformation                        @"UserInformation"
 #define kDeviceTokenKey                         @"DeviceToken"
 #define kdeviceType                             @"2"
+#define kDateFormat                             @"yyyy-MM-dd"
 
 #define IPHONE4S                                [UIScreen mainScreen].bounds.size.height==480
 #define IPHONE5S                                [UIScreen mainScreen].bounds.size.height==568
@@ -78,25 +74,14 @@ static NSString *const kPushNotificationDialogMessageKey = @"message";
 #define IPHONE6PLUS                             [UIScreen mainScreen].bounds.size.height==736
 #define IPAD                                    [UIScreen mainScreen].bounds.size.height==1024
 
+#define msgEnterFirstName                       @"Please enter firstname."
+#define msgEnterLastName                        @"Please enter lastname."
 #define msgEnterName                            @"Please enter username."
+#define msgEnterEmail                           @"Please enter email address."
 #define msgEnterPassword                        @"Please enter password."
-#define msgEnterConfirmPass                     @"Please enter confirm pin."
+#define msgEnterConfirmPass                     @"Please enter confirm password."
+#define msgEnterDOB                             @"Please enter date of birth."
 #define msgEnterValidEmail                      @"Please enter a valid email address."
-#define msgEnterValidPhoneNo                    @"Please enter valid phone number."
-#define msgConfirmPassNotMatch                  @"Pin and confirm pin do not match."
-#define msgEnterItemName                        @"Please enter item name."
-#define msgSelectCategory                       @"Please select category."
-#define msgSelectLendBy                         @"Please select lent by."
-#define msgSelectBorrowedBy                     @"Please select borrowed by."
-#define msgSelectReturnDate                     @"Please select return date."
-#define msgDeleteTitle                          @"Delete"
-#define msgDeleteDesc                           @"Are you sure you want to delete this photo?"
-#define msgItemNotFound                         @"No items available."
-#define msgFriendNotFound                       @"No friends available."
-#define msgCategoryNotFound                     @"No categories available."
-#define msgInternetSlow                         @"Internet connection is too slow or not connected. Please try again."
-#define msgPinValidation                        @"Please enter 4 digit pin."
-#define msgEnterValidPin                        @"Incorrect Pin. Please enter a valid pin."
-#define msgDeleteItem                           @"Are you sure you want to delete this item?"
+#define msgConfirmPassNotMatch                  @"Password and confirm password do not match."
 
 #endif

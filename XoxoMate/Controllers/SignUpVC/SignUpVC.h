@@ -10,4 +10,7 @@
 
 @interface SignUpVC : UIViewController
 
+@property (strong, nonatomic) NSString *strUserName;
+@property (strong, nonatomic) NSString *strPassword;
+
 @end

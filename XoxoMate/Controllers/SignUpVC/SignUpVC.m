@@ -32,6 +32,11 @@
     [self commonInit];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -47,7 +52,9 @@
     }
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    NSURL *websiteUrl = [NSURL URLWithString:@"https://xoxomate.com/home.html"];
+    
+    NSString *strString = [NSString stringWithFormat:@"https://xoxomate.com/demo/appinterface.html?action=userlogin&username=%@&password=%@",self.strUserName,self.strPassword];
+    NSURL *websiteUrl = [NSURL URLWithString:strString];
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:websiteUrl];
     [self.webView loadRequest:urlRequest];
 }
@@ -92,7 +99,7 @@
         
         CGRect aRect = [[UIScreen mainScreen] bounds];
         
-        [navController.view setFrame:(CGRect){0, 0, aRect.size.width, aRect.size.height-48}];
+        [navController.view setFrame:(CGRect){0, 0, aRect.size.width, aRect.size.height-47}];
         
         [self addChildViewController:navController];
         [self.view addSubview:navController.view];
@@ -124,11 +131,9 @@
         UINavigationController *navController=[[UINavigationController alloc]initWithRootViewController:self.activeUserList];
         navController.navigationBar.hidden = YES;
         
-        //    self.onlineUserList.delegate = self;
-        
         CGRect aRect = [[UIScreen mainScreen] bounds];
         
-        [navController.view setFrame:(CGRect){0, 0, aRect.size.width, aRect.size.height-48}];
+        [navController.view setFrame:(CGRect){0, 0, aRect.size.width, aRect.size.height-47}];
         [self addChildViewController:navController];
         [self.view addSubview:navController.view];
         [self didMoveToParentViewController:navController];
@@ -165,6 +170,11 @@
                 // [weakSelf performSegueWithIdentifier:@"kBackToLoginViewController" sender:nil];
                 app.isLogin = NO;
                 [self.navigationController popViewControllerAnimated:YES];
+                
+                NSURL *websiteUrl = [NSURL URLWithString:@"https://xoxomate.com/demo/appinterface.html?action=userlogout"];
+                NSURLRequest *urlRequest = [NSURLRequest requestWithURL:websiteUrl];
+                [self.webView loadRequest:urlRequest];
+                
                 [SVProgressHUD showSuccessWithStatus:@"Completed"];
             }];
         });

@@ -33,11 +33,7 @@ const NSTimeInterval kQBDialingTimeInterval = 5.f;
     [QBSettings setAuthSecret:kAuthSecret];
     [QBSettings setAccountKey:kAccountKey];
     [QBSettings setChatDNSLookupCacheEnabled:YES];
-    
-    // Enables Quickblox REST API calls debug console output
     [QBSettings setLogLevel:QBLogLevelDebug];
-    
-    // Enables detailed XMPP logging in console output
     [QBSettings enableXMPPLogging];
     
     // app was launched from push notification, handling it
@@ -57,15 +53,16 @@ const NSTimeInterval kQBDialingTimeInterval = 5.f;
     
     [QBSettings setLogLevel:QBLogLevelNothing];
     [QBSettings setAutoReconnectEnabled:YES];
-    //QuickbloxWebRTC preferences
     
     [QBRTCConfig setAnswerTimeInterval:kQBAnswerTimeInterval];
     [QBRTCConfig setDisconnectTimeInterval:kQBRTCDisconnectTimeInterval];
     [QBRTCConfig setDialingTimeInterval:kQBDialingTimeInterval];
     [QBRTCClient initializeRTC];
 
-    [self registerForRemoteNotifications];
+    [IQKeyboardManager sharedManager].enable = YES;
     
+    [self registerForRemoteNotifications];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:5];
     return YES;
 }
 
@@ -150,6 +147,10 @@ const NSTimeInterval kQBDialingTimeInterval = 5.f;
 #else
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
 #endif
+}
+
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
+    
 }
 
 @end

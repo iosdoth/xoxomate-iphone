@@ -53,31 +53,6 @@
     [self removeFromParentViewController];
     [self.view removeFromSuperview];
     [self willMoveToParentViewController:nil];
-    
-//    for (UIViewController *aVC in self.navigationController.viewControllers)
-//    {
-//        if ([aVC isKindOfClass:[LoginVC class]])
-//        {
-//            LoginVC *aLoginVC = (LoginVC *)aVC;
-//            [self.navigationController popToViewController:aLoginVC animated:YES];
-//            return;
-//        }
-//        else if ([aVC isKindOfClass:[SignUpVC class]])
-//        {
-//            [self.navigationController setViewControllers:@[[self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"], [self.storyboard instantiateViewControllerWithIdentifier:@"LoginVC"]] animated:NO];
-//            
-//            for (UIViewController *innerVC in self.navigationController.viewControllers)
-//            {
-//                if ([aVC isKindOfClass:[LoginVC class]])
-//                {
-//                    LoginVC *aLoginVC = (LoginVC *)innerVC;
-//                    [self.navigationController popToViewController:aLoginVC animated:YES];
-//                    return;
-//                }
-//            }
-//        }
-//    }
-//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - UITableView Delegate Method

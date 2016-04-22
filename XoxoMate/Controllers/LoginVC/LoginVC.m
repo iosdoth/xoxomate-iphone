@@ -34,6 +34,11 @@
     [self commonInit];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -48,8 +53,8 @@
 #pragma mark - Button Tapped Event
 
 - (IBAction)btnSignUpTapped:(id)sender{
-    SignUpVC *signUp = [self.storyboard instantiateViewControllerWithIdentifier:@"SignUpVC"];
-    [self.navigationController pushViewController:signUp animated:YES];
+    RegisterVC *registerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RegisterVC"];
+    [self.navigationController pushViewController:registerVC animated:YES];
 }
 
 - (IBAction)btnLoginTapped:(id)sender{
@@ -69,12 +74,8 @@
         
         if (serr){
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            NSLog(@"Error generating json data for send dictionary...");
-            NSLog(@"Error (%@), error: %@", dict, serr);
             return;
         }
-        
-        NSLog(@"now sending this dictionary...\n%@\n\n\n", dict);
         
 #define appService [NSURL URLWithString:@"https://xoxomate.com/api/Apis/login.json"]
         
@@ -94,9 +95,8 @@
          {
              if (!data){
                  [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                 NSLog(@"No data returned from server, error ocurred: %@", error);
                  [[TKAlertCenter defaultCenter] postAlertWithMessage:@"No data returned from server, error ocurred" image:kErrorImage];
-
+                 
                  return;
              }
              
@@ -106,9 +106,7 @@
                                            options:kNilOptions
                                            error:&deserr];
              [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-             NSLog(@"The responseDict\n\n%@\n\n", responseDict);
-             NSLog(@"ERROR CODE :: %@",responseDict[@"response"][@"error"]);
-             NSString *strErrorCode = [NSString stringWithFormat:@"%@",responseDict[@"response"][@"error"]];
+            NSString *strErrorCode = [NSString stringWithFormat:@"%@",responseDict[@"response"][@"error"]];
              [self resignFields];
              if ([strErrorCode isEqualToString:@"1"]){
                  [[TKAlertCenter defaultCenter] postAlertWithMessage:responseDict[@"response"][@"message"] image:kErrorImage];
@@ -123,60 +121,36 @@
 #pragma mark - Login Into App
 
 - (void)loginIntoApp:(NSUInteger)loginID{
-//    __weak __typeof(self)weakSelf = self;
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     QBUUser *myUser = [[QBUUser alloc]init];
     myUser.login = _txtUserName.text;
-
+    
     myUser.password = _txtPassword.text;
     
     [ServicesManager.instance logInWithUser:myUser completion:^(BOOL success, NSString *errorMessage) {
         if (success) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-           // [SVProgressHUD showSuccessWithStatus:@"Logged in"];
-//            __typeof(self) strongSelf = weakSelf;
-//            [strongSelf performSegueWithIdentifier:kGoToDialogsSegueIdentifier sender:nil];
-
+            // [SVProgressHUD showSuccessWithStatus:@"Logged in"];
+            //            __typeof(self) strongSelf = weakSelf;
+            //            [strongSelf performSegueWithIdentifier:kGoToDialogsSegueIdentifier sender:nil];
+            
             SignUpVC *signUp = [self.storyboard instantiateViewControllerWithIdentifier:@"SignUpVC"];
+            signUp.strUserName = self.txtUserName.text;
+            signUp.strPassword = self.txtPassword.text;
             [self.navigationController pushViewController:signUp animated:YES];
-
+            
             [self logInChatWithUser:myUser];
         } else {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-           // [SVProgressHUD showErrorWithStatus:@"Error"];
-            NSLog(@"Error :: %@",errorMessage.debugDescription);
+            // [SVProgressHUD showErrorWithStatus:@"Error"];
         }
     }];
 }
 
 - (QBUUser *)currentUser {
     return [QBSession currentSession].currentUser;
-}
-
-#pragma mark - UITextField Delegate methods
-
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
-    if (textField == _txtPassword) {
-        UIToolbar* keyboardDoneButtonView = [[UIToolbar alloc] init];
-        [keyboardDoneButtonView sizeToFit];
-        UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneClicked:)];
-        [keyboardDoneButtonView setItems:[NSArray arrayWithObjects:doneButton, nil]];
-        textField.inputAccessoryView = keyboardDoneButtonView;
-    }
-    
-    return YES;
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
-
-    return YES;
-}
-
-- (IBAction)doneClicked:(id)sender{
-    [self.view endEditing:YES];
 }
 
 - (void)resignFields{
@@ -187,7 +161,7 @@
 #pragma mark - Touch Event
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-   [self.view endEditing:YES];
+    [self.view endEditing:YES];
 }
 
 - (BOOL)isValidLoginDetails{
@@ -216,7 +190,7 @@
     
     __weak __typeof(self)weakSelf = self;
     [[ChatManager instance] logInWithUser:user completion:^(BOOL error) {
-//        [UsersDataSourceCall.instance loadUsersWithList:self.settings.listType];
+        //        [UsersDataSourceCall.instance loadUsersWithList:self.settings.listType];
         if (!error) {
             
             [SVProgressHUD dismiss];
