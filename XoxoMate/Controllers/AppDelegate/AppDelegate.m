@@ -20,7 +20,7 @@ const NSTimeInterval kQBAnswerTimeInterval = 1200.f;
 const NSTimeInterval kQBRTCDisconnectTimeInterval = 30.f;
 const NSTimeInterval kQBDialingTimeInterval = 5.f;
 
-@interface AppDelegate ()
+@interface AppDelegate ()<NotificationServiceDelegate>
 
 @end
 
@@ -62,7 +62,10 @@ const NSTimeInterval kQBDialingTimeInterval = 5.f;
     [IQKeyboardManager sharedManager].enable = YES;
     
     [self registerForRemoteNotifications];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:5];
+
+    
+    //[[UIApplication sharedApplication] setApplicationIconBadgeNumber:3];
+    
     return YES;
 }
 
@@ -150,7 +153,7 @@ const NSTimeInterval kQBDialingTimeInterval = 5.f;
 }
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
-    
+    NSLog(@"session :: %@",identifier);
 }
 
 @end

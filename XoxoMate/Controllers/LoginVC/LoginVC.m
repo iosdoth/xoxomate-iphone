@@ -10,7 +10,7 @@
 #import "Constants.h"
 #import "UsersDataSourceCall.h"
 
-@interface LoginVC ()
+@interface LoginVC ()<NotificationServiceDelegate>
 {
     AppDelegate *app;
 }
@@ -48,6 +48,36 @@
 - (void)commonInit{
     app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.settings = Settings.instance;
+    [self alreadyLogin];
+}
+
+- (void)alreadyLogin{
+    ServicesManager *servicesManager = [ServicesManager instance];
+    
+    if (servicesManager.currentUser != nil) {
+        servicesManager.currentUser.password = [Helper getFromNSUserDefaults:@"SavePassword"];
+        
+        [SVProgressHUD showSuccessWithStatus:[@"Logging as " stringByAppendingString:servicesManager.currentUser.login]];
+        [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+        
+        [servicesManager logInWithUser:servicesManager.currentUser completion:^(BOOL success, NSString *errorMessage) {
+            if (success) {
+                
+                if (servicesManager.notificationService.pushDialogID == nil) {
+                    app.isLogin = YES;
+                    SignUpVC *signUp = [self.storyboard instantiateViewControllerWithIdentifier:@"SignUpVC"];
+                    signUp.strUserName = servicesManager.currentUser.login;
+                    signUp.strPassword = servicesManager.currentUser.password;
+                    [self.navigationController pushViewController:signUp animated:YES];
+                }
+                else {
+                    [servicesManager.notificationService handlePushNotificationWithDelegate:self];
+                }
+            } else {
+                [SVProgressHUD showErrorWithStatus:@"Error"];
+            }
+        }];
+    }
 }
 
 #pragma mark - Button Tapped Event
@@ -132,10 +162,7 @@
     [ServicesManager.instance logInWithUser:myUser completion:^(BOOL success, NSString *errorMessage) {
         if (success) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            // [SVProgressHUD showSuccessWithStatus:@"Logged in"];
-            //            __typeof(self) strongSelf = weakSelf;
-            //            [strongSelf performSegueWithIdentifier:kGoToDialogsSegueIdentifier sender:nil];
-            
+            [Helper addToNSUserDefaults:_txtPassword.text forKey:@"SavePassword"];
             SignUpVC *signUp = [self.storyboard instantiateViewControllerWithIdentifier:@"SignUpVC"];
             signUp.strUserName = self.txtUserName.text;
             signUp.strPassword = self.txtPassword.text;
@@ -144,7 +171,7 @@
             [self logInChatWithUser:myUser];
         } else {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            // [SVProgressHUD showErrorWithStatus:@"Error"];
+            [SVProgressHUD showErrorWithStatus:@"Error"];
         }
     }];
 }
